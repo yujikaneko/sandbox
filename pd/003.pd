@@ -1,0 +1,8 @@
+#N canvas 988 114 756 516 10;
+#X obj 22 33 table sketch 515;
+#X obj 19 108 tabosc4~ sketch;
+#X obj 26 162 dac~;
+#X msg 16 71 220;
+#X connect 1 0 2 0;
+#X connect 1 0 2 1;
+#X connect 3 0 1 0;
