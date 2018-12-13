@@ -17,6 +17,7 @@
 //}
 
 const int cell_size = 5;
+const int block_size = 5;
 const int bin_num = 4;
 
 cv::Mat HistCell(cv::Mat grad, cv::Mat angle, int x, int y) {
@@ -39,26 +40,29 @@ cv::Mat HistCell(cv::Mat grad, cv::Mat angle, int x, int y) {
 cv::Mat HOG(cv::Mat grad, cv::Mat angle) {
     int X = grad.cols;
     int Y = grad.rows;
-    cv::Size cell_num(bin_num * static_cast<int>(X / cell_size),
+    cv::Size cell_num(static_cast<int>(X / cell_size),
                       static_cast<int>(Y / cell_size));
-    cv::Mat dst = cv::Mat::zeros(cell_num, CV_32F);
+    cv::Size hist_siz(bin_num * cell_num.width, cell_num.height);
+    cv::Mat hist = cv::Mat::zeros(hist_siz, CV_32F);
 
     cv::Rect roi(1, 1, cell_size, cell_size);
     cv::Rect dst_roi(0, 0, bin_num, 1);
     for (roi.y = 1; roi.y + cell_size < Y - 1; roi.y += cell_size) {
         for (roi.x = 1; roi.x + cell_size < X - 1; roi.x += cell_size) {
             cv::Mat h = HistCell(grad, angle, roi.x, roi.y);
-            h.copyTo(dst(dst_roi));
+            h.copyTo(hist(dst_roi));
             dst_roi.x += bin_num;
         }
         dst_roi.x = 0;
         dst_roi.y++;
     }
-    return dst;
+
+
+    return hist;
 }
 
 int main(void) {
-    cv::Mat src_img = cv::imread("sample.jpg", 1);
+    cv::Mat src_img = cv::imread("/home/amano/sample.jpg", 1);
     if (src_img.empty()) return -1;
 
     cv::Mat m_img, mono_img;
