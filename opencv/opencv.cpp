@@ -120,7 +120,7 @@ cv::Mat HOG(cv::Mat img_src) {
 }
 
 int main(void) {
-    cv::Mat img = cv::imread("/home/amano/sample.jpg", 1);
+    cv::Mat img = cv::imread("sample.jpg", 1);
     if (img.empty()) return -1;
 
     cv::Mat hog = HOG(img);
